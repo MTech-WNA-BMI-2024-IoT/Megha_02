@@ -1,13 +1,13 @@
 import time
-import adafruit_bh1750
-import smbus
+import adafruit_BH1750
+import board
 
 # Initialize the BH1750 sensor with the default I2C address (0x23)
-i2c = smbus.SMBus(1)
-sensor = adafruit_bh1750.BH1750(i2c, address=0x23)
+i2c = board.I2C()
+sensor = adafruit_BH1750.BH1750(i2c)
 
 # Set the measurement mode to continuous high-resolution mode
-sensor.mode = adafruit_bh1750.BH1750.ONCE_HIRES_1
+sensor.mode = adafruit_BH1750.BH1750.ONCE_HIRES_1
 
 while True:
     # Read the light level
