@@ -1,8 +1,9 @@
 import time
 import adafruit_bh1750
+from adafruit_blinka.board import I2C
 
 # Initialize the BH1750 sensor with the default I2C address (0x23)
-i2c = board.I2C()
+i2c = I2C(scl=board.SCL, sda=board.SDA)
 sensor = adafruit_bh1750.BH1750(i2c)
 
 # Set the measurement mode to continuous high-resolution mode
