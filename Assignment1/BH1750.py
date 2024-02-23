@@ -1,20 +1,26 @@
 import time
-import adafruit_BH1750
 import board
+import busio
+import adafruit_bh1750
 
-# Initialize the BH1750 sensor with the default I2C address (0x23)
-i2c = board.I2C()
-sensor = adafruit_BH1750.BH1750(i2c)
+# Create I2C bus
+i2c = busio.I2C(board.SCL, board.SDA)
 
-# Set the measurement mode to continuous high-resolution mode
-sensor.mode = adafruit_BH1750.BH1750.ONCE_HIRES_1
+# Create sensor object
+sensor = adafruit_bh1750.BH1750(i2c)
 
-while True:
-    # Read the light level
-    lux = sensor.luminance
+# Main loop
+try:
+    while True:
+        # Read the light level
+        light_level = sensor.lux
 
-    # Print the light level to the terminal
-    print("Light level: {:.2f} lx".format(lux))
+        # Print the light level
+        print("Light: {} lux".format(light_level))
 
-    # Wait for one second
-    time.sleep(1)
+        # Wait for a moment
+        time.sleep(1)
+
+# Exit cleanly
+except KeyboardInterrupt:
+    pass
