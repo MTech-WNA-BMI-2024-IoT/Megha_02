@@ -1,21 +1,33 @@
-#Import pymysql module library
-import pymysql
+import mysql.connector
+from datetime import datetime
 
-#Create a connection to MySQL Database 
-conn =pymysql.connect(database="sensorData",user="myuser",password="mypassword",host="localhost")
+# Connect to MySQL database
+db = mysql.connector.connect(
+    host="localhost",
+    user="myuser",
+    password="mypassword",
+    database="mydatabase"
+)
 
-#Create a MySQL Cursor to that executes the SQLs
-cur=conn.cursor()
-#Create a dictonary containing the fields, name, age and place
-data={'topic':'sensor/temp','data':10.2}
-#Execute the SQL to write data to the database
-cur.execute("INSERT INTO MQTTdata(topic , data)VALUES(%(topic)s,%(data)s);",data)
-print("Data added")
-#Close the cursor
-cur.close()
-#Commit the data to the database
-conn.commit()
-#Close the connection to the database
-conn.close()
+# Create a cursor object to execute SQL queries
+cursor = db.cursor()
 
-#Open phpMyAdmin and see how the data is stored to the database
+# Function to insert sensor readings into the database
+def insert_reading(sensor_id, timestamp, value):
+    sql = "INSERT INTO Reading (sensor_id, timestamp, value) VALUES (%s, %s, %s)"
+    val = (sensor_id, timestamp, value)
+    cursor.execute(sql, val)
+    db.commit()
+    print("Reading inserted successfully.")
+
+# Example usage:
+sensor_id = 1  # Assuming sensor ID 1 is attached to the solar panel
+timestamp = datetime.now()  # Current timestamp
+value = 25.5  # Example sensor reading value
+
+# Insert the reading into the database
+insert_reading(sensor_id, timestamp, value)
+
+# Close the cursor and database connection
+cursor.close()
+db.close()
